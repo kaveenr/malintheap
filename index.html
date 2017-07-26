@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1366, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>MalintheAP</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <style>
+    .document {
+      background-image: url(https://media.giphy.com/media/fjuI4besWF2Wk/giphy.gif);
+    }
+    .stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+    }
+    .stage-center {
+      max-width: 50%;
+      background-color: rgba(255,255,255,0.9);
+      padding: 3em;
+      border-radius: 25px;
+    }
+  </style>
+</head>
+<body class="document">
+  <div class="stage">
+    <div class="stage-center text-center">
+      <h3 id="tag" class="tag"></h2>
+      <h1 id="title">Malinthe Ap</h1>
+      <br>
+      <dv id="text">Loading</div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script>
+    Array.prototype.randomElement = function () {
+      return this[Math.floor(Math.random() * this.length)]
+    }
+    $(document).ready(function(){
+      $.ajax({
+        url: "http://malintheapproves.tumblr.com/api/read/json?num=50?type=text",
+        jsonpCallback: "tumblr_api_read",
+        dataType: "jsonp"
+      }).done(function( response ) {
+          var item = response.posts.randomElement();console.log(item);
+          $("#title").html(item["regular-title"]);
+          $("#text").html(item["regular-body"]);
+          if ('tags' in item){
+            var tag = item["tags"][0];
+            $("#tag").html("#"+tag).addClass("text-" + (tag.toUpperCase() == "YAY" ? "success" : "danger"));
+          }else{
+            $("#tag").hide();
+          }
+          $.get("http://api.giphy.com/v1/gifs/random?api_key=d4f7e40645644c8d9871ea9aebc09286&q="+item["regular-title"]).done(function(response){
+            console.log(response);
+            $(".document").css("background-image", "url("+response.data.fixed_height_downsampled_url+")");
+          });
+      }).fail(function( response ) {
+          console.log("failed");
+          console.log( response );
+      });
+    })
+  </script>
+</body>
+</html>
