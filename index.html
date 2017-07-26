@@ -35,6 +35,7 @@
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.0/jquery.mark.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <script>
     Array.prototype.randomElement = function () {
@@ -48,7 +49,7 @@
       }).done(function( response ) {
           var item = response.posts.randomElement();console.log(item);
           $("#title").html(item["regular-title"]);
-          $("#text").html(item["regular-body"]);
+          $("#text").html(item["regular-body"]).mark("malinthe",{className : "text-danger"});
           if ('tags' in item){
             var tag = item["tags"][0];
             $("#tag").html("#"+tag).addClass("text-" + (tag.toUpperCase() == "YAY" ? "success" : "danger"));
